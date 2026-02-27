@@ -1470,7 +1470,7 @@ class JavaExamples {
 	.taskType(TaskType.TextEmbedding)
 	.inferenceConfig(i -> i
 		.service("custom")
-		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.openai.com/v1/embeddings\",\"headers\":{\"Authorization\":\"Bearer {api_key}\",\"Content-Type\":\"application/json;charset=utf-8\"},\"request\":\"{\\"input\\": {input}, \\"model\\": \\"text-embedding-3-small\\"}\",\"response\":{\"json_parser\":{\"text_embeddings\":\"$.data[*].embedding[*]\"}}}"))
+		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.openai.com/v1/embeddings\",\"headers\":{\"Authorization\":\"Bearer ${'\$'}{api_key}\",\"Content-Type\":\"application/json;charset=utf-8\"},\"request\":\"{\\"input\\": ${'\$'}{input}, \\"model\\": \\"text-embedding-3-small\\"}\",\"response\":{\"json_parser\":{\"text_embeddings\":\"${'\$'}.data[*].embedding[*]\"}}}"))
 	)
 );
 ""","""client.inference().put(p -> p
@@ -1478,7 +1478,7 @@ class JavaExamples {
 	.taskType(TaskType.Rerank)
 	.inferenceConfig(i -> i
 		.service("custom")
-		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.cohere.com/v2/rerank\",\"headers\":{\"Authorization\":\"bearer {api_key}\",\"Content-Type\":\"application/json\"},\"request\":\"{\\"documents\\": {input}, \\"query\\": {query}, \\"model\\": \\"rerank-v3.5\\"}\",\"response\":{\"json_parser\":{\"reranked_index\":\"$.results[*].index\",\"relevance_score\":\"$.results[*].relevance_score\"}}}"))
+		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.cohere.com/v2/rerank\",\"headers\":{\"Authorization\":\"bearer ${'\$'}{api_key}\",\"Content-Type\":\"application/json\"},\"request\":\"{\\"documents\\": ${'\$'}{input}, \\"query\\": ${'\$'}{query}, \\"model\\": \\"rerank-v3.5\\"}\",\"response\":{\"json_parser\":{\"reranked_index\":\"${'\$'}.results[*].index\",\"relevance_score\":\"${'\$'}.results[*].relevance_score\"}}}"))
 	)
 );
 ""","""client.inference().put(p -> p
@@ -1486,7 +1486,7 @@ class JavaExamples {
 	.taskType(TaskType.Rerank)
 	.inferenceConfig(i -> i
 		.service("custom")
-		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.jina.ai/v1/rerank\",\"headers\":{\"Content-Type\":\"application/json\",\"Authorization\":\"Bearer {api_key}\"},\"request\":\"{\\"model\\": \\"jina-reranker-v2-base-multilingual\\",\\"query\\": {query},\\"documents\\":{input}}\",\"response\":{\"json_parser\":{\"relevance_score\":\"$.results[*].relevance_score\",\"reranked_index\":\"$.results[*].index\"}}}"))
+		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.jina.ai/v1/rerank\",\"headers\":{\"Content-Type\":\"application/json\",\"Authorization\":\"Bearer ${'\$'}{api_key}\"},\"request\":\"{\\"model\\": \\"jina-reranker-v2-base-multilingual\\",\\"query\\": ${'\$'}{query},\\"documents\\":${'\$'}{input}}\",\"response\":{\"json_parser\":{\"relevance_score\":\"${'\$'}.results[*].relevance_score\",\"reranked_index\":\"${'\$'}.results[*].index\"}}}"))
 	)
 );
 ""","""client.inference().put(p -> p
@@ -1494,7 +1494,7 @@ class JavaExamples {
 	.taskType(TaskType.TextEmbedding)
 	.inferenceConfig(i -> i
 		.service("custom")
-		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.cohere.com/v2/embed\",\"headers\":{\"Authorization\":\"bearer {api_key}\",\"Content-Type\":\"application/json\"},\"request\":\"{\\"texts\\": {input}, \\"model\\": \\"embed-v4.0\\", \\"input_type\\": {input_type}}\",\"response\":{\"json_parser\":{\"text_embeddings\":\"$.embeddings.float[*]\"}},\"input_type\":{\"translation\":{\"ingest\":\"search_document\",\"search\":\"search_query\"},\"default\":\"search_document\"}}"))
+		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"https://api.cohere.com/v2/embed\",\"headers\":{\"Authorization\":\"bearer ${'\$'}{api_key}\",\"Content-Type\":\"application/json\"},\"request\":\"{\\"texts\\": ${'\$'}{input}, \\"model\\": \\"embed-v4.0\\", \\"input_type\\": ${'\$'}{input_type}}\",\"response\":{\"json_parser\":{\"text_embeddings\":\"${'\$'}.embeddings.float[*]\"}},\"input_type\":{\"translation\":{\"ingest\":\"search_document\",\"search\":\"search_query\"},\"default\":\"search_document\"}}"))
 	)
 );
 ""","""client.inference().put(p -> p
@@ -1502,7 +1502,7 @@ class JavaExamples {
 	.taskType(TaskType.TextEmbedding)
 	.inferenceConfig(i -> i
 		.service("custom")
-		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"<dedicated inference endpoint on HF>/v1/embeddings\",\"headers\":{\"Authorization\":\"Bearer {api_key}\",\"Content-Type\":\"application/json\"},\"request\":\"{\\"input\\": {input}}\",\"response\":{\"json_parser\":{\"text_embeddings\":\"$.data[*].embedding[*]\"}}}"))
+		.serviceSettings(JsonData.fromJson("{\"secret_parameters\":{\"api_key\":\"<api key>\"},\"url\":\"<dedicated inference endpoint on HF>/v1/embeddings\",\"headers\":{\"Authorization\":\"Bearer ${'\$'}{api_key}\",\"Content-Type\":\"application/json\"},\"request\":\"{\\"input\\": ${'\$'}{input}}\",\"response\":{\"json_parser\":{\"text_embeddings\":\"${'\$'}.data[*].embedding[*]\"}}}"))
 	)
 );
 ""","""client.inference().put(p -> p
@@ -4236,7 +4236,7 @@ class JavaExamples {
 	.includeGlobalState(false)
 	.indices("index_1,index_2")
 	.renamePattern("index_(.+)")
-	.renameReplacement("restored_index_$1")
+	.renameReplacement("restored_index_${'\$'}1")
 	.repository("my_repository")
 	.snapshot("snapshot_2")
 	.waitForCompletion(true)

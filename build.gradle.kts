@@ -60,7 +60,7 @@ tasks.register("extractExampleMap") {
     doLast {
         // Use the raw GitHub URL
         val url =
-            "https://raw.githubusercontent.com/elastic/elasticsearch-specification/9a1090de4498a6fcbff76b7168cb7ea20fa0f640/docs/examples/languageExamples.json"
+            "https://raw.githubusercontent.com/elastic/elasticsearch-specification/main/docs/examples/languageExamples.json"
 
         // Download and parse JSON
         val jsonContent = URL(url).readText()
@@ -70,7 +70,7 @@ tasks.register("extractExampleMap") {
         // Extract all Java code snippets
         val javaCodes = mutableListOf<String>() // Pair of (example name, code)
 
-        data.forEach { (exampleKey, examplesArray) ->
+        data.forEach { (_, examplesArray) ->
             if (examplesArray is List<*>) {
                 examplesArray.forEach { item ->
                     if (item is Map<*, *>) {
@@ -87,7 +87,7 @@ tasks.register("extractExampleMap") {
 
         val listentries = javaCodes.stream()
             .sorted(Comparator.naturalOrder())
-            .map { x -> x.replace("\${","{") }
+            .map { x -> x.replace("\$", "\${'\\$'}") }
             .map { x -> x.replace("    ","\t") }
             .collect(Collectors.joining("\"\"\",\"\"\"","\"\"\"","\"\"\""))
 

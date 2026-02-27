@@ -34,7 +34,7 @@ class CustomInlineCompletionProvider : InlineCompletionProvider {
             // get the full text
             val text = ReadAction.compute<String, Throwable> {
                 getFullLineText(element)
-            }
+            } ?: return InlineCompletionSuggestion.Empty
 
             // removing the custom client name
             val textNoClient = text.substring(text.indexOf('.') + 1)
@@ -56,7 +56,7 @@ class CustomInlineCompletionProvider : InlineCompletionProvider {
             // applying indentation
             val resultWithIndentation = resultWithoutExistingText.replace("\n", "\n" + spaces)
 
-            return InlineCompletionSingleSuggestion.Companion.build(
+            return InlineCompletionSingleSuggestion.build(
                 UserDataHolderBase(),
                 flowOf(
                     InlineCompletionGrayTextElement(
@@ -70,7 +70,7 @@ class CustomInlineCompletionProvider : InlineCompletionProvider {
     }
 
     private fun getFullLineText(element: PsiElement): String? {
-        var fullLine: PsiExpression =
+        val fullLine: PsiExpression =
             PsiTreeUtil.getParentOfType(element, PsiExpression::class.java) ?: return null
         return fullLine.text
     }
@@ -94,7 +94,7 @@ class CustomInlineCompletionProvider : InlineCompletionProvider {
                 qualifiedName == "co.elastic.clients.elasticsearch.ElasticsearchAsyncClient"
     }
 
-    fun getIndentation(element: PsiElement): String {
+    private fun getIndentation(element: PsiElement): String {
         val file = element.containingFile
         val document = PsiDocumentManager.getInstance(element.project).getDocument(file) ?: return ""
 
@@ -110,15 +110,15 @@ class CustomInlineCompletionProvider : InlineCompletionProvider {
         return " ".repeat(indent.length)
     }
 
-     /**
-        Example Psi structure:
-        PsiMethodCallExpression: client.method().anotherMethod()
-        ├── PsiReferenceExpression (methodExpression): client.method().anotherMethod
-        │   └── PsiMethodCallExpression (qualifier): client.method()
-        │       ├── PsiReferenceExpression (methodExpression): client.method
-        │       │   └── PsiReferenceExpression (qualifier): client
-        │       └── PsiExpressionList: () // where method arguments would be
-        └── PsiExpressionList: ()
+    /**
+    Example Psi structure:
+    PsiMethodCallExpression: client.method().anotherMethod()
+    ├── PsiReferenceExpression (methodExpression): client.method().anotherMethod
+    │   └── PsiMethodCallExpression (qualifier): client.method()
+    │       ├── PsiReferenceExpression (methodExpression): client.method
+    │       │   └── PsiReferenceExpression (qualifier): client
+    │       └── PsiExpressionList: () // where method arguments would be
+    └── PsiExpressionList: ()
      */
     private fun getRootVariableOfChain(element: PsiElement): PsiVariable? {
 
